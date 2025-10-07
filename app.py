@@ -104,4 +104,5 @@ st.dataframe(
 )
 
 st.markdown("---")
-st.write("Desenvolvido para fins de estudo em Python e Streamlit.")
+st.write("Desenvolvido para fins de estudo por @fesoubr.")
+
