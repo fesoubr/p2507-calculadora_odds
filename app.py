@@ -4,8 +4,7 @@ import pandas as pd
 from fractions import Fraction
 
 # =====================================================================
-# O "CÉREBRO" DO APP - AS FUNÇÕES DE CONVERSÃO (IGUAIS AO CÓDIGO DO COLAB)
-# Nenhuma alteração é necessária aqui.
+# O "CÉREBRO" DO APP - AS FUNÇÕES DE CONVERSÃO 
 # =====================================================================
 
 def converter_a_partir_decimal(odd_decimal):
@@ -52,31 +51,38 @@ def converter_a_partir_fracionaria(odd_fracionaria):
 
 
 # =====================================================================
-# A INTERFACE DO APP - A "CARA" DO NOSSO APLICATIVO (A PARTE DO STREAMLIT)
-# É aqui que a mágica do Streamlit acontece!
+# A INTERFACE DO APP - A "CARA" DO NOSSO APLICATIVO 
 # =====================================================================
 
-# st.title() -> Cria um título principal para a página
 st.title('Calculadora de Conversão de Odds 🎲')
 
-# st.sidebar -> Cria uma barra lateral para colocarmos os controles
+# Adicionando o st.expander com as descrições dos tipos de odds.
+# Usamos st.markdown() para formatar o texto com negrito e parágrafos.
+with st.expander("Clique aqui para entender os diferentes formatos de odds"):
+    st.markdown("""
+        **Decimal (Ex: 1.50, 2.75):** É o mais comum na Europa e no Brasil. O valor já inclui a sua aposta de volta. Se você aposta R$10 em uma odd de 2.50, seu retorno total é R$25 (R$15 de lucro + R$10 da aposta).
+
+        **Fracionária (Ex: 1/2, 5/2):** Comum no Reino Unido. Mostra o lucro puro. Uma odd de 5/2 significa que para cada R$2 que você aposta, você lucra R$5.
+
+        **Americana (Ex: +150, -120):** Comum nos EUA.
+        - **Positiva (+150):** Mostra quanto você lucraria com uma aposta de R$100. (+150 significa que R$100 de aposta te dão R$150 de lucro).
+        - **Negativa (-120):** Mostra quanto você precisa apostar para ter R$100 de lucro. (−120 significa que você precisa apostar R$120 para lucrar R$100).
+    """)
+
+
 st.sidebar.header('Insira a Odd para Converter')
 
-# st.selectbox -> Cria uma caixa de seleção para o usuário escolher uma opção
 tipo_odd_selecionada = st.sidebar.selectbox(
     '1. Selecione o formato da sua odd:',
     ('Decimal', 'Americana', 'Fracionária')
 )
 
-# Agora, com base na escolha, mostramos o campo de input correto
 if tipo_odd_selecionada == 'Decimal':
-    # st.number_input -> Campo para inserir números
     valor_input = st.sidebar.number_input('2. Digite o valor da odd:',
                                           min_value=1.01,
-                                          value=2.50, # Valor que já aparece por padrão
+                                          value=2.50,
                                           step=0.1,
                                           format="%.2f")
-    # Chama a função de conversão correspondente
     resultado = converter_a_partir_decimal(valor_input)
 
 elif tipo_odd_selecionada == 'Americana':
@@ -86,24 +92,16 @@ elif tipo_odd_selecionada == 'Americana':
     resultado = converter_a_partir_americana(valor_input)
 
 else: # Fracionária
-    # st.text_input -> Campo para inserir texto
     valor_input = st.sidebar.text_input('2. Digite o valor da odd (ex: 5/2):', value='5/2')
     resultado = converter_a_partir_fracionaria(valor_input)
 
-
-# st.subheader() -> Cria um título menor
 st.subheader('Resultado da Conversão')
-
-# Cria o DataFrame com o resultado (igual ao Colab)
 df_resultado = pd.DataFrame([resultado])
-
-# st.dataframe() -> Mostra a tabela de forma interativa e bonita
 st.dataframe(
     df_resultado,
-    hide_index=True, # Esconde o número da linha
-    use_container_width=True # Faz a tabela usar toda a largura da página
+    hide_index=True,
+    use_container_width=True
 )
 
 st.markdown("---")
-
-st.write("Desenvolvido para fins de estudo por @fesoubr.")
+st.write("Desenvolvido para fins de estudo em Python e Streamlit.")
